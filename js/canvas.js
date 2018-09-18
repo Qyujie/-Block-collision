@@ -1,35 +1,39 @@
+/* 
+ * author：Qyujie
+ */
+
 $(function() {
 	var canvas = document.getElementById("mycanvas"),
 		ctx = canvas.getContext("2d"),
-		rectArray = {},
-		rectArrayIndex = 0,
-		rectArrayNum = 0.8,
-		mouseRect = new rect(true),
-		canvasRect = {
+		rectArray = {},//存放方块
+		rectArrayIndex = 0,//方块下标
+		rectArrayNum = 0.8,//0~1之间的数，表示方块数量
+		mouseRect = new rect(true),//鼠标操控的方块
+		canvasRect = {//与画布相同的方块，配合碰撞检测来验证小方块是否在画布中
 			X: 0,
 			Y: 0,
 			width: canvas.width,
 			height: canvas.height
 		};
 
-	function renderFrame() {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		drawRect(mouseRect);
-		if(Math.random() > rectArrayNum) {
+	function renderFrame() {//动画
+		ctx.clearRect(0, 0, canvas.width, canvas.height);//清除画布
+		drawRect(mouseRect);//绘制鼠标方块
+		if(Math.random() > rectArrayNum) {//随机产出方块
 			new rect();
 		}
 		for(var i in rectArray) {
-			rectArray[i].X += Math.cos(rectArray[i].direction) * rectArray[i].speed;
+			rectArray[i].X += Math.cos(rectArray[i].direction) * rectArray[i].speed;//根据方向和速度来改变位置
 			rectArray[i].Y += Math.sin(rectArray[i].direction) * rectArray[i].speed;
-			if(!collision_detection(canvasRect, rectArray[i])) {
+			if(!collision_detection(canvasRect, rectArray[i])) {//如果方块不在画布中，就删除它，不然就绘制它
 				delete rectArray[i];
 			} else {
 				drawRect(rectArray[i]);
 				if(collision_detection(mouseRect, rectArray[i])) {
 					console.log("碰撞");
-					rectArray[i].rectColor = "red";
+					rectArray[i].color = "red";
 				} else
-					rectArray[i].rectColor = "rgba(161,0,230,0.7)";
+					rectArray[i].color = "rgba(161,0,230,0.7)";
 			}
 
 		}
@@ -52,7 +56,7 @@ $(function() {
 		this.Y = 0;
 		this.width = 20;
 		this.height = 20;
-		this.rectColor = "rgba(161,0,230,0.7)";
+		this.color = "rgba(161,0,230,0.7)";
 		if(mouse != true) {
 			this.direction = 0;
 			this.speed = 3;
@@ -69,7 +73,7 @@ $(function() {
 
 	}
 
-	function random_position(rect) { //给rect在canvas中设置一个随机的位置以及运动方向及速度
+	function random_position(rect) { //给rect在canvas中设置一个随机的位置以及运动方向及速度，其随机位置为画布边缘
 		rect.speed = getSpeed(1, 3);
 		var rw = rect.width,
 			rh = rect.height,
@@ -96,7 +100,7 @@ $(function() {
 	}
 
 	function drawRect(rect) { //绘制矩形
-		ctx.fillStyle = rect.rectColor;
+		ctx.fillStyle = rect.color;
 		ctx.fillRect(rect.X, rect.Y, rect.width, rect.height);
 	}
 
