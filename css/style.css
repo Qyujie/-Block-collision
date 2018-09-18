@@ -1,0 +1,16 @@
+body{
+	padding:0px;
+	margin:0px;
+}
+canvas{
+	position: absolute;
+	margin:auto;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+    background-color: rgba(20,185,200,0.3);
+}
+canvas:hover{
+	cursor:none;
+}
